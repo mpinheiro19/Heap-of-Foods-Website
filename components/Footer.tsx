@@ -33,7 +33,6 @@ export function Footer() {
               className="flex items-center gap-2 hover:text-grey transition"
             >
               <FontAwesomeIcon icon={faSteam} />
-              {t("footer.workshop")}
             </a>
 
             <a
@@ -50,8 +49,8 @@ export function Footer() {
               href="/contributors"
               className="flex items-center gap-2 hover:text-grey transition"
             >
-              <FontAwesomeIcon icon={faSteam} />
-              <span className="hidden sm:inline">{t("footer.workshop")}</span>
+              <FontAwesomeIcon icon={faUsers} />
+              <span className="hidden sm:inline">{t("footer.contributors")}</span>
             </Link>
 
             <a
