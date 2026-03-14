@@ -293,7 +293,7 @@ export default function HomePage() {
         </div>
 
         {/* CATEGORIES */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-25 mb-6 w-full justify-items-center drop-shadow-md">
+        <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-6 w-full drop-shadow-md">
           <CategoryCard
             icon="/icons/misc/icon_cookpot.png"
             label={t("main.cookpot")}
