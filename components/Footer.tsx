@@ -32,7 +32,7 @@ export function Footer() {
               className="flex items-center gap-2 hover:text-grey transition"
             >
               <FontAwesomeIcon icon={faDiscord} />
-              {t("footer.discord")}
+              <span className="hidden sm:inline">{t("footer.discord")}</span>
             </a>
 
             <a
@@ -42,7 +42,7 @@ export function Footer() {
               className="flex items-center gap-2 hover:text-grey transition"
             >
               <FontAwesomeIcon icon={faSteam} />
-              {t("footer.workshop")}
+              <span className="hidden sm:inline">{t("footer.workshop")}</span>
             </a>
 
             <a
@@ -52,7 +52,7 @@ export function Footer() {
               className="flex items-center gap-2 hover:text-grey transition"
             >
               <FontAwesomeIcon icon={faKoFi} />
-              {t("footer.kofi")}
+              <span className="hidden sm:inline">{t("footer.kofi")}</span>
             </a>
           </div>
 
