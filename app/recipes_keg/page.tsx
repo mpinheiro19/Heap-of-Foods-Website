@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect } from "react";
 import { useTranslation } from "@/lib/i18n";
+import { getAssetPath } from "@/lib/paths";
 import { usePageTitle } from "@/components/PageTitle";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -462,7 +463,6 @@ export default function CookPotKeg() {
       {/* STICKY SEARCH + FILTER + SORT + BACK TO TOP */}
       <div className="sticky top-14 z-40 bg-zinc-300 dark:bg-zinc-800 shadow-md">
         <div className="max-w-4xl mx-auto px-1 pt-0 pb-1 sm:px-2 sm:py-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-          {/* SEARCH - Agora alinhado horizontalmente */}
           <div className="relative w-full max-w-sm">
             <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-zinc-500 dark:text-white">
               <FontAwesomeIcon icon={faMagnifyingGlass} />
@@ -528,7 +528,7 @@ export default function CookPotKeg() {
                       }`}
                     >
                       <img
-                        src={`/foods_cookpot_keg/${recipe.name}.png`}
+                        src={getAssetPath(`/foods_cookpot_keg/${recipe.name}.png`)}
                         className="w-10 h-10 object-contain"
                       />
                       <span className="text-sm font-semibold">
@@ -602,7 +602,7 @@ export default function CookPotKeg() {
                   <div className="w-11/12 sm:w-[300px] bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl p-4 flex flex-col gap-4 font-bold shadow-sm dark:shadow-none">
                     <DropdownGroup
                       title={t("filters.temperature")}
-                      icon="/icons/cooking/icon_temperature.png"
+                      icon={getAssetPath("/icons/cooking/icon_temperature.png")}
                     >
                       <CheckboxFilter
                         label={t("card.temperature.hot")}
@@ -631,7 +631,7 @@ export default function CookPotKeg() {
 
                     <DropdownGroup
                       title={t("filters.foodtype")}
-                      icon="/icons/cooking/icon_foodtype.png"
+                      icon={getAssetPath("/icons/cooking/icon_foodtype.png")}
                     >
                       {FOODTYPE_ORDER.filter((type) =>
                         recipes.some((r: any) => r.foodtype === type)
@@ -655,7 +655,7 @@ export default function CookPotKeg() {
 
                     <DropdownGroup
                       title={t("filters.debuff.title")}
-                      icon="/icons/cooking/icon_debuff.png"
+                      icon={getAssetPath("/icons/cooking/icon_debuff.png")}
                     >
                       <CheckboxFilter
                         label={t("filters.debuff.hasdebuff")}
@@ -693,7 +693,7 @@ export default function CookPotKeg() {
                   <div className="w-11/12 sm:w-[300px] bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl p-4 flex flex-col gap-4 font-bold shadow-sm dark:shadow-none">
                     <DropdownGroup
                       title={t("sorting.directiontype")}
-                      icon="/icons/cooking/icon_priority.png"
+                      icon={getAssetPath("/icons/cooking/icon_priority.png")}
                     >
                       <CheckboxFilter
                         label={t("sorting.direction.up")}
@@ -711,7 +711,7 @@ export default function CookPotKeg() {
 
                     <DropdownGroup
                       title={t("sorting.ordertype")}
-                      icon="/icons/cooking/icon_debuff.png"
+                      icon={getAssetPath("/icons/cooking/icon_debuff.png")}
                     >
                       <CheckboxFilter
                         label={t("sorting.type.default")}
@@ -807,7 +807,7 @@ export default function CookPotKeg() {
             className="bg-white dark:bg-zinc-900 rounded-2xl p-3 flex flex-col items-center gap-3 cursor-pointer hover:scale-105 transition shadow-sm dark:shadow-none w-full sm:w-64"
           >
             <img
-              src={`/foods_cookpot_keg/${recipe.name}.png`}
+              src={getAssetPath(`/foods_cookpot_keg/${recipe.name}.png`)}
               className="w-24"
             />
             <h2 className="text-center font-semibold text-lg text-zinc-900 dark:text-white">
@@ -818,7 +818,7 @@ export default function CookPotKeg() {
               {recipe.foodtype && <FoodType type={recipe.foodtype} t={t} />}
               {recipe.temperature != null && (
                 <TopEffect
-                  icon="/icons/cooking/icon_temperature.png"
+                  icon={getAssetPath("/icons/cooking/icon_temperature.png")}
                   value={
                     recipe.temperature > 0
                       ? t("card.temperature.hot")
@@ -829,7 +829,7 @@ export default function CookPotKeg() {
               )}
               {recipe.debuff && (
                 <TopEffect
-                  icon="/icons/cooking/icon_debuff.png"
+                  icon={getAssetPath("/icons/cooking/icon_debuff.png")}
                   value={t("card.debuff.hasEffect")}
                   tooltip={t("tooltips.debuff")}
                 />
@@ -841,7 +841,7 @@ export default function CookPotKeg() {
                 ).map((char) => (
                   <TopEffect
                     key={char}
-                    icon={`/icons/characters/character_${char}.png`}
+                    icon={getAssetPath(`/icons/characters/character_${char}.png`)}
                     value={t(`characterfood.${char}`)}
                     tooltip={t("tooltips.characterfood")}
                   />
@@ -894,7 +894,7 @@ export default function CookPotKeg() {
             </div>
 
             <img
-              src={`/foods_cookpot_keg/${selected.name}.png`}
+              src={getAssetPath(`/foods_cookpot_keg/${selected.name}.png`)}
               className="w-24 mx-auto mb-4"
             />
 
@@ -947,7 +947,7 @@ export default function CookPotKeg() {
 
               {selected.temperature != null && (
                 <TopEffect
-                  icon="/icons/cooking/icon_temperature.png"
+                  icon={getAssetPath("/icons/cooking/icon_temperature.png")}
                   value={FormatTemperature(
                     selected.temperature,
                     selected.temperatureDuration,
@@ -958,7 +958,7 @@ export default function CookPotKeg() {
 
               {selected.debuff && (
                 <TopEffect
-                  icon="/icons/cooking/icon_debuff.png"
+                  icon={getAssetPath("/icons/cooking/icon_debuff.png")}
                   value={t(`recipes_debuff.${selected.name}`)}
                   tooltip={t("tooltips.debuff")}
                 />
@@ -968,7 +968,7 @@ export default function CookPotKeg() {
             {/* STATUS */}
             <Block>
               <Stat
-                icon="/icons/cooking/icon_health.png"
+                icon={getAssetPath("/icons/cooking/icon_health.png")}
                 value={selected.health}
                 tooltip={t("tooltips.health")}
                 isStatus
@@ -976,7 +976,7 @@ export default function CookPotKeg() {
                 stat="health"
               />
               <Stat
-                icon="/icons/cooking/icon_hunger.png"
+                icon={getAssetPath("/icons/cooking/icon_hunger.png")}
                 value={selected.hunger}
                 tooltip={t("tooltips.hunger")}
                 isStatus
@@ -984,7 +984,7 @@ export default function CookPotKeg() {
                 stat="hunger"
               />
               <Stat
-                icon="/icons/cooking/icon_sanity.png"
+                icon={getAssetPath("/icons/cooking/icon_sanity.png")}
                 value={selected.sanity}
                 tooltip={t("tooltips.sanity")}
                 isStatus
@@ -995,23 +995,23 @@ export default function CookPotKeg() {
 
             <Block>
               <Stat
-                icon="/icons/cooking/icon_priority.png"
+                icon={getAssetPath("/icons/cooking/icon_priority.png")}
                 value={selected.priority}
                 tooltip={t("tooltips.priority")}
               />
               <Stat
-                icon="/icons/cooking/icon_cooktime.png"
+                icon={getAssetPath("/icons/cooking/icon_cooktime.png")}
                 value={FormatCookTime(selected.cooktime)}
                 tooltip={t("tooltips.cooktime")}
               />
               <Stat
-                icon="/icons/cooking/icon_spoilage.png"
+                icon={getAssetPath("/icons/cooking/icon_spoilage.png")}
                 value={GetSpoilageLabel(selected.spoilage)}
                 tooltip={t("tooltips.spoilage")}
               />
               {selected.stacksize && (
                 <Stat
-                  icon="/icons/cooking/icon_stacksize.png"
+                  icon={getAssetPath("/icons/cooking/icon_stacksize.png")}
                   value={selected.stacksize}
                   tooltip={t("tooltips.stacksize")}
                 />
@@ -1241,7 +1241,7 @@ function Stat({ icon, value, tooltip, isStatus = false, recipe, stat }: any) {
       {extra.characters.map((char, index) => (
         <span key={char} className="flex items-center font-bold">
           <img
-            src={`/icons/characters/character_${char}.png`}
+            src={getAssetPath(`/icons/characters/character_${char}.png`)}
             className="w-7 h-7"
           />
           {index < extra.characters.length - 1 && ""}
@@ -1272,7 +1272,7 @@ function FoodType({ type, t }: { type: string; t: (key: string) => string }) {
   return (
     <div className="relative group flex items-center gap-2 bg-zinc-100 dark:bg-zinc-800 px-3 py-1 rounded-full text-xs tracking-wide cursor-default">
       <img
-        src="/icons/cooking/icon_foodtype.png"
+        src={getAssetPath("/icons/cooking/icon_foodtype.png")}
         className="w-5 h-5 object-contain"
       />
       <span className="text-zinc-900 dark:text-white">
@@ -1310,7 +1310,7 @@ function TopEffect({ icon, value, tooltip, enableTooltip = true }: any) {
             bg-black text-white text-xs dark:bg-white dark:text-black
             px-3 py-1 rounded
             shadow-lg z-50
-            break-words max-w-xs sm:max-w-md md:max-w-lg
+            whitespace-nowrap max-w-xs sm:max-w-md md:max-w-lg
           "
         >
           {tooltip}
@@ -1388,7 +1388,7 @@ function IngredientIconWithCount({
     <div className="flex flex-col items-center font-bold group relative">
       <div className="w-10 h-10 relative">
         <img
-          src={`/icons/ingredients/${iconName}.png`}
+          src={getAssetPath(`/icons/ingredients/${iconName}.png`)}
           className="w-full h-full object-contain"
         />
 

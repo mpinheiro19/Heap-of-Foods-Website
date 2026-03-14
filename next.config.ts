@@ -1,7 +1,17 @@
 import type { NextConfig } from "next";
 
+const basePath = "/Heap-of-Foods-Recipe-Book";
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: "export",
+  basePath,
+  assetPrefix: basePath,
+  images: {
+    unoptimized: true,
+  },
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
 };
 
 export default nextConfig;

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslation } from "@/lib/i18n";
+import { getAssetPath } from "@/lib/paths";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faGear, faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { usePathname } from "next/navigation";
@@ -15,12 +16,12 @@ export default function TopHotBar() {
   if (pathname === "/") return null;
 
   const navLinks = [
-    { href: "/recipes_cookpot", icon: "/icons/misc/icon_cookpot.png", label: t("main.cookpot") },
-    { href: "/recipes_warly", icon: "/icons/misc/icon_cookpot_warly.png", label: t("main.cookpot_warly") },
-    { href: "/recipes_keg", icon: "/icons/misc/icon_cookpot_keg.png", label: t("main.cookpot_keg") },
-    { href: "/recipes_jar", icon: "/icons/misc/icon_cookpot_jar.png", label: t("main.cookpot_jar") },
-    { href: "/recipes_seasonal", icon: "/icons/misc/icon_cookpot_seasonal.png", label: t("main.cookpot_seasonal") },
-    { href: "/ingredients", icon: "/icons/misc/icon_ingredients.png", label: t("main.ingredients") },
+    { href: "/recipes_cookpot", icon: getAssetPath("/icons/misc/icon_cookpot.png"), label: t("main.cookpot") },
+    { href: "/recipes_warly", icon: getAssetPath("/icons/misc/icon_cookpot_warly.png"), label: t("main.cookpot_warly") },
+    { href: "/recipes_keg", icon: getAssetPath("/icons/misc/icon_cookpot_keg.png"), label: t("main.cookpot_keg") },
+    { href: "/recipes_jar", icon: getAssetPath("/icons/misc/icon_cookpot_jar.png"), label: t("main.cookpot_jar") },
+    { href: "/recipes_seasonal", icon: getAssetPath("/icons/misc/icon_cookpot_seasonal.png"), label: t("main.cookpot_seasonal") },
+    { href: "/ingredients", icon: getAssetPath("/icons/misc/icon_ingredients.png"), label: t("main.ingredients") },
   ];
 
   return (

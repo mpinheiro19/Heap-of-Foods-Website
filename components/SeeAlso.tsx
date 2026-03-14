@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/lib/i18n";
+import { getAssetPath } from "@/lib/paths";
 import type { RecipeInput } from "@/lib/recommend";
 
 interface SeeAlsoProps {
@@ -29,7 +30,7 @@ export default function SeeAlso({
         aria-label={`${t("seealso.label")}: ${t(`${translationPrefix}.${suggested.name}`)}`}
       >
         <img
-          src={`${imageBasePath}/${suggested.name}.png`}
+          src={getAssetPath(`${imageBasePath}/${suggested.name}.png`)}
           className="w-6 h-6 sm:w-8 sm:h-8 object-contain"
           alt={t(`${translationPrefix}.${suggested.name}`)}
         />

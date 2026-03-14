@@ -3,9 +3,10 @@
 import { useTranslation } from "@/lib/i18n";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faSteam, faKoFi } from "@fortawesome/free-brands-svg-icons";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faUsers } from "@fortawesome/free-solid-svg-icons";
 
 export function Footer() {
   const { t } = useTranslation();
@@ -26,6 +27,16 @@ export function Footer() {
           <div className="flex flex-col items-center gap-3 sm:gap-6">
           <div className="flex items-center gap-3 sm:gap-5">
             <a
+              href="https://steamcommunity.com/sharedfiles/filedetails/?id=2334209327"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 hover:text-grey transition"
+            >
+              <FontAwesomeIcon icon={faSteam} />
+              {t("footer.workshop")}
+            </a>
+
+            <a
               href="https://discord.gg/jjNr4Vvutn"
               target="_blank"
               rel="noopener noreferrer"
@@ -35,15 +46,13 @@ export function Footer() {
               <span className="hidden sm:inline">{t("footer.discord")}</span>
             </a>
 
-            <a
-              href="https://steamcommunity.com/sharedfiles/filedetails/?id=2334209327"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/contributors"
               className="flex items-center gap-2 hover:text-grey transition"
             >
               <FontAwesomeIcon icon={faSteam} />
               <span className="hidden sm:inline">{t("footer.workshop")}</span>
-            </a>
+            </Link>
 
             <a
               href="https://ko-fi.com/kynoox"

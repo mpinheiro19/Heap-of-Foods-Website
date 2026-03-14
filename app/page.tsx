@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef } from "react";
+import Link from "next/link";
 import { useTranslation } from "@/lib/i18n";
+import { getAssetPath } from "@/lib/paths";
 import { usePageTitle } from "@/components/PageTitle";
+import { useRouter } from "next/navigation";
 import RandomRecipe from "../components/RandomRecipe";
 import DailyRecipe from "../components/DailyRecipe";
 
@@ -18,14 +21,14 @@ import {
   faMagnifyingGlass,
   faCircleQuestion,
   faGear,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { faDiscord, faSteam, faKoFi } from "@fortawesome/free-brands-svg-icons";
-
-import Link from "next/link";
 import Fuse from "fuse.js";
 
 export default function HomePage() {
   const { t } = useTranslation();
+  const router = useRouter();
 
   usePageTitle(t("pages.home.title"));
 
@@ -46,7 +49,7 @@ export default function HomePage() {
       const query = item.name;
 
       if (currentPath !== "/ingredients") {
-        window.location.href = `/ingredients?ingredient=${query}`;
+        router.push(`/ingredients?ingredient=${query}`);
       } else {
         const element = document.getElementById(`ingredient-${query}`);
         if (element) {
@@ -65,7 +68,7 @@ export default function HomePage() {
       const page = recipePageMap[item.type] || "/recipes_cookpot";
 
       if (currentPath !== page) {
-        window.location.href = `${page}?recipe=${item.name}`;
+        router.push(`${page}?recipe=${item.name}`);
       } else {
         const element = document.getElementById(`recipe-${item.name}`);
         if (element) {
@@ -160,8 +163,6 @@ export default function HomePage() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const PickDailyRecipe = recipes[Math.floor(Math.random() * recipes.length)];
-
   return (
     <div className="min-h-screen bg-zinc-300 dark:bg-zinc-800 text-zinc-900 dark:text-white flex justify-center relative">
       {/* SETTINGS BUTTON */}
@@ -179,7 +180,7 @@ export default function HomePage() {
         <div className="mt-10 mb-5 flex flex-col items-center text-center">
           <div className="flex items-center gap-4">
             <img
-              src="/icons/misc/icon_hof.png"
+              src={getAssetPath("/icons/misc/icon_hof.png")}
               className="w-20 h-20 sm:w-[120px] sm:h-[120px] drop-shadow-lg"
             />
             <div className="flex flex-col items-center text-center drop-shadow-md">
@@ -260,14 +261,14 @@ export default function HomePage() {
                       <img
                         src={
                           item.type === "ingredients"
-                            ? `/icons/ingredients/ingredient_${item.name}${
+                            ? getAssetPath(`/icons/ingredients/ingredient_${item.name}${
                                 item.variant === "normal"
                                   ? ""
                                   : `_${item.variant}`
-                              }.png`
+                              }.png`)
                             : item.type === "recipes_seasonal"
-                              ? `/foods_cookpot_seasonal/${item.name}.png`
-                              : `${item.icon}/${item.name}.png`
+                              ? getAssetPath(`/foods_cookpot_seasonal/${item.name}.png`)
+                              : getAssetPath(`${item.icon}/${item.name}.png`)
                         }
                         className="w-10 h-10 object-contain"
                       />
@@ -287,7 +288,7 @@ export default function HomePage() {
 
         {/* SEARCH CATEGORY TEXT */}
         <div className="mb-6 text-center w-full">
-          <h2 className="text-xl font-bold tracking-wide text-zinc-900 dark:text-white drop-shadow-md">
+          <h2 className="text-xl font-bold tracking-wide text-zinc-900 dark:text-white">
             {t("main.browsecategory")}
           </h2>
         </div>
@@ -295,32 +296,32 @@ export default function HomePage() {
         {/* CATEGORIES */}
         <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-6 w-full drop-shadow-md">
           <CategoryCard
-            icon="/icons/misc/icon_cookpot.png"
+            icon={getAssetPath("/icons/misc/icon_cookpot.png")}
             label={t("main.cookpot")}
             href="/recipes_cookpot"
           />
           <CategoryCard
-            icon="/icons/misc/icon_cookpot_warly.png"
+            icon={getAssetPath("/icons/misc/icon_cookpot_warly.png")}
             label={t("main.cookpot_warly")}
             href="/recipes_warly"
           />
           <CategoryCard
-            icon="/icons/misc/icon_cookpot_keg.png"
+            icon={getAssetPath("/icons/misc/icon_cookpot_keg.png")}
             label={t("main.cookpot_keg")}
             href="/recipes_keg"
           />
           <CategoryCard
-            icon="/icons/misc/icon_cookpot_jar.png"
+            icon={getAssetPath("/icons/misc/icon_cookpot_jar.png")}
             label={t("main.cookpot_jar")}
             href="/recipes_jar"
           />
           <CategoryCard
-            icon="/icons/misc/icon_cookpot_seasonal.png"
+            icon={getAssetPath("/icons/misc/icon_cookpot_seasonal.png")}
             label={t("main.cookpot_seasonal")}
             href="/recipes_seasonal"
           />
           <CategoryCard
-            icon="/icons/misc/icon_ingredients.png"
+            icon={getAssetPath("/icons/misc/icon_ingredients.png")}
             label={t("main.ingredients")}
             href="/ingredients"
           />
@@ -347,6 +348,11 @@ export default function HomePage() {
             label={t("footer.discord")}
             href="https://discord.gg/jjNr4Vvutn"
           />
+          <LocalButton
+            icon={faUsers}
+            label={t("footer.contributors")}
+            href="/contributors"
+          />
           <ExternalButton
             icon={faKoFi}
             label={t("footer.kofi")}
@@ -360,7 +366,7 @@ export default function HomePage() {
 
 function CategoryCard({ icon, label, href }: any) {
   return (
-    <a
+    <Link
       href={href}
       className="
         w-40 h-40
@@ -382,7 +388,7 @@ function CategoryCard({ icon, label, href }: any) {
       <img src={icon} className="w-16 h-16 object-contain" />
 
       <span>{label}</span>
-    </a>
+    </Link>
   );
 }
 
@@ -406,5 +412,27 @@ function ExternalButton({ icon, label, href }: any) {
       <FontAwesomeIcon icon={icon} />
       {label}
     </a>
+  );
+}
+
+function LocalButton({ icon, label, href }: any) {
+  return (
+    <Link
+      href={href}
+      className="
+        bg-zinc-100 dark:bg-zinc-900
+      px-6 py-4
+      rounded-xl
+      flex items-center gap-3
+      font-bold
+      text-lg
+      hover:scale-105
+      transition
+      shadow
+      "
+    >
+      <FontAwesomeIcon icon={icon} />
+      {label}
+    </Link>
   );
 }

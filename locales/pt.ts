@@ -6,7 +6,7 @@ const pt = {
     randomrecipe: "Receita Aleatória",
     close: "Retornar",
     previous: "Anterior",
-    browsecategory: "...ou navegue por uma das categorias:",
+    browsecategory: "Ou navegue por uma das categorias:",
     next: "Próximo",
     backtotop: "Retornar ao Topo",
     cookpot: "Panela",
@@ -40,12 +40,28 @@ const pt = {
     backtopage: "Voltar para Página Anterior",
   },
 
+  footer: {
+    backtotop: "Retornar ao Topo",
+    mainpage: "Página Principal",
+    discord: "Entre em nosso Discord",
+    download: "Baixe o Mod",
+    workshop: "Página da Oficina",
+    kofi: "Me Apoie!",
+    contributors: "Contribuidores",
+    copyright: "© Copyright {{year}} - Todos os direitos reservados.",
+    description: `Heap of Foods é um mod para o Don't Starve Together feito por Kyno.
+    Este mod não é afiliado com a Klei Entertainment.
+
+    Um obrigado especial para todos que tornaram esse mod possível!`
+  },
+
   pages: {
     home: {
       title: "Inicio",
       daily: {
         title: "Receita do Dia",
         timer: "Próxima Receita em:",
+        details: "Ver mais detalhes",
       },
     },
     cookpot: {
@@ -71,18 +87,22 @@ const pt = {
     },
   },
 
-  footer: {
-    backtotop: "Retornar ao Topo",
-    mainpage: "Página Principal",
-    discord: "Entre em nosso Discord",
-    download: "Baixe o Mod",
-    workshop: "Página da Oficina",
-    kofi: "Me Apoie!",
-    copyright: "© Copyright {{year}} - Todos os direitos reservados.",
-    description: `Heap of Foods é um mod para o Don't Starve Together feito por Kyno.
-    Este mod não é afiliado com a Klei Entertainment.
-
-    Um obrigado especial para todos que tornaram esse mod possível!`
+  contributors: {
+    title: "Contribuidores",
+    description: "Esta página celebra todas as pessoas extraordinárias que contribuíram para este projeto. Desde doadores generosos até artistas talentosos, criadores de conteúdo, guias e tradutores, cada contribuição é essencial para o sucesso deste mod!",
+    cta: "Se você gostaria de ter seu card aqui, você pode fazer uma doação (nunca necessária, sempre bem-vinda!) no meu Ko-fi ou contribuir para o mod em nosso Discord com betas, artes, traduções e muitas outras coisas!",
+    nocontributors: "Nenhum contribuidor encontrado.",
+    badges: {
+      donator: "Doador",
+      topdonator: "Top Doador",
+      contentcreator: "Criador de Conteúdo",
+      moddev: "Desenvolvedor",
+      modartist: "Artista",
+      modteste: "Beta Tester",
+      modguide: "Criador de Guia",
+      modlocpl: "Tradutor - Polski",
+      modloczh: "Tradutor - 简体中文",
+    },
   },
   
   time: {

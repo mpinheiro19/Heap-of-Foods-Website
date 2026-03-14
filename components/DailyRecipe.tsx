@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "@/lib/i18n";
+import { getAssetPath } from "@/lib/paths";
+import { useRouter, usePathname } from "next/navigation";
 
 import recipes from "@/data/recipes_cookpot.json";
 import recipes_warly from "@/data/recipes_cookpot_warly.json";
@@ -33,9 +35,8 @@ interface FoodTypeProps {
 
 export default function DailyRecipe() {
   const { t } = useTranslation();
-
-  const ROTATION_HOURS = 24;
-  const ROTATION_MS = ROTATION_HOURS * 60 * 60 * 1000;
+  const router = useRouter();
+  const pathname = usePathname();
 
   const allRecipes = [
     ...recipes.map(r => ({ ...r, prefix: "recipes", icon: "foods_cookpot", source: "cookpot" })),
@@ -47,27 +48,27 @@ export default function DailyRecipe() {
 
   const SOURCE_INFO: Record<SourceKeys, { icon: string; name: string; page: string }> = {
     cookpot: {
-      icon: "/icons/misc/icon_cookpot.png",
+      icon: getAssetPath("/icons/misc/icon_cookpot.png"),
       name: t("main.cookpot"),
       page: "/recipes_cookpot",
     },
     warly: {
-      icon: "/icons/misc/icon_cookpot_warly.png",
+      icon: getAssetPath("/icons/misc/icon_cookpot_warly.png"),
       name: t("main.cookpot_warly"),
       page: "/recipes_warly",
     },
     keg: {
-      icon: "/icons/misc/icon_cookpot_keg.png",
+      icon: getAssetPath("/icons/misc/icon_cookpot_keg.png"),
       name: t("main.cookpot_keg"),
       page: "/recipes_keg",
     },
     jar: {
-      icon: "/icons/misc/icon_cookpot_jar.png",
+      icon: getAssetPath("/icons/misc/icon_cookpot_jar.png"),
       name: t("main.cookpot_jar"),
       page: "/recipes_jar",
     },
     seasonal: {
-      icon: "/icons/misc/icon_cookpot_seasonal.png",
+      icon: getAssetPath("/icons/misc/icon_cookpot_seasonal.png"),
       name: t("main.cookpot_seasonal"),
       page: "/recipes_seasonal",
     },
@@ -80,9 +81,19 @@ export default function DailyRecipe() {
     return () => clearInterval(interval);
   }, []);
 
+  function seededRandom(seed: number) {
+    const x = Math.sin(seed) * 10000;
+    return x - Math.floor(x);
+  }
+
+  const ROTATION_HOURS = 24; // 200 = 10 sec for easy test.
+  const ROTATION_MS = ROTATION_HOURS * 60 * 60 * 1000;
+
   function getDailyRecipe() {
-    const seed = Math.floor(now / ROTATION_MS);
-    const index = seed % allRecipes.length;
+    const OFFSET_MS = 0;
+    const seed = Math.floor((now + OFFSET_MS) / ROTATION_MS);
+    const random = seededRandom(seed);
+    const index = Math.floor(random * allRecipes.length);
     return allRecipes[index];
   }
 
@@ -126,7 +137,7 @@ export default function DailyRecipe() {
 
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full max-w-4xl shadow-md">
         <img
-          src={`/${recipe.icon}/${recipe.name}.png`}
+          src={getAssetPath(`/${recipe.icon}/${recipe.name}.png`)}
           className="w-24 h-24 sm:w-32 sm:h-32 object-contain flex-shrink-0"
         />
         <div className="flex flex-col flex-1 gap-4 items-center text-center">
@@ -139,10 +150,9 @@ export default function DailyRecipe() {
 
               <button
                 onClick={() => {
-                  const currentPath = window.location.pathname;
                   const page = source.page;
-                  if (currentPath !== page) {
-                    window.location.href = `${page}?recipe=${recipe.name}`;
+                  if (pathname !== page) {
+                    router.push(`${page}?recipe=${recipe.name}`);
                   } else {
                     const element = document.getElementById(`recipe-${recipe.name}`);
                     if (element) element.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -150,31 +160,29 @@ export default function DailyRecipe() {
                 }}
                 className="ml-2 bg-zinc-200 dark:bg-zinc-700 text-zinc-900 dark:text-white hover:bg-zinc-300 dark:hover:bg-zinc-600 px-2 py-1 rounded font-semibold text-sm transition-colors cursor-pointer"
               >
-                See more details
+                {t("pages.home.daily.details")}
               </button>
             </div>
           </div>
 
-          {/* Status da comida */}
           <div className="flex gap-2 justify-center flex-wrap">
-            <Stat icon="/icons/cooking/icon_health.png" value={recipe.health} tooltip={t("tooltips.health")} isStatus />
-            <Stat icon="/icons/cooking/icon_hunger.png" value={recipe.hunger} tooltip={t("tooltips.hunger")} isStatus />
-            <Stat icon="/icons/cooking/icon_sanity.png" value={recipe.sanity} tooltip={t("tooltips.sanity")} isStatus />
+            <Stat icon={getAssetPath("/icons/cooking/icon_health.png")} value={recipe.health} tooltip={t("tooltips.health")} isStatus />
+            <Stat icon={getAssetPath("/icons/cooking/icon_hunger.png")} value={recipe.hunger} tooltip={t("tooltips.hunger")} isStatus />
+            <Stat icon={getAssetPath("/icons/cooking/icon_sanity.png")} value={recipe.sanity} tooltip={t("tooltips.sanity")} isStatus />
           </div>
 
-          {/* Características adicionais */}
           <div className="flex gap-2 flex-wrap font-bold justify-center">
             {recipe.foodtype && <FoodType type={recipe.foodtype} t={t} />}
             {recipe.temperature != null && (
-              <TopEffect icon="/icons/cooking/icon_temperature.png" value={formatTemperature(recipe.temperature, recipe.temperatureDuration ?? 0)} tooltip={t("tooltips.temperature")} />
+              <TopEffect icon={getAssetPath("/icons/cooking/icon_temperature.png")} value={formatTemperature(recipe.temperature, recipe.temperatureDuration ?? 0)} tooltip={t("tooltips.temperature")} />
             )}
             {recipe.debuff && (
-              <TopEffect icon="/icons/cooking/icon_debuff.png" value={t(`recipes_debuff.${recipe.name}`)} tooltip={t("tooltips.debuff")} />
+              <TopEffect icon={getAssetPath("/icons/cooking/icon_debuff.png")} value={t(`recipes_debuff.${recipe.name}`)} tooltip={t("tooltips.debuff")} />
             )}
             {recipe.characterfood &&
               (Array.isArray(recipe.characterfood) ? recipe.characterfood : [recipe.characterfood])
                 .map((char) => (
-                  <TopEffect key={char} icon={`/icons/characters/character_${char}.png`} value={t(`characterfood.${char}`)} tooltip={t("tooltips.characterfood")} />
+                  <TopEffect key={char} icon={getAssetPath(`/icons/characters/character_${char}.png`)} value={t(`characterfood.${char}`)} tooltip={t("tooltips.characterfood")} />
                 ))}
           </div>
         </div>
@@ -212,13 +220,11 @@ function Stat({ icon, value, tooltip, isStatus = false, recipe, stat }: any) {
     extrasMap[val].add(char);
   };
 
-  // Character specific food (ex: Warly)
   if (stat === "hunger" && recipe?.characterfood) {
     const charValue = (recipe.hunger ?? 0) + 15;
     addExtra(charValue, recipe.characterfood);
   }
 
-  // Monster food (Webber, Wortox)
   if (recipe?.monsterfood) {
     const monsterValue = recipe[`monster${stat}`];
 
@@ -228,7 +234,6 @@ function Stat({ icon, value, tooltip, isStatus = false, recipe, stat }: any) {
     }
   }
 
-  // Merm food (Wurt)
   if (recipe?.mermfood) {
     const mermValue = recipe[`merm${stat}`];
 
@@ -247,12 +252,10 @@ function Stat({ icon, value, tooltip, isStatus = false, recipe, stat }: any) {
       <img src={icon} className="w-8 h-8 sm:w-9 sm:h-9 object-contain" />
 
       <div className="flex flex-col items-center leading-tight">
-        {/* valor normal */}
         <span className={`text-base font-semibold ${colorClass}`}>
           {displayValue}
         </span>
 
-        {/* valores especiais */}
         {extraValues.map((extra, i) => (
           <span
             key={i}
@@ -266,7 +269,7 @@ function Stat({ icon, value, tooltip, isStatus = false, recipe, stat }: any) {
             {extra.characters.map((char) => (
               <img
                 key={char}
-                src={`/icons/characters/character_${char}.png`}
+                src={getAssetPath(`/icons/characters/character_${char}.png`)}
                 className="w-5 h-5"
               />
             ))}
@@ -275,7 +278,6 @@ function Stat({ icon, value, tooltip, isStatus = false, recipe, stat }: any) {
         ))}
       </div>
 
-      {/* Tooltip */}
       <div
         className="
         absolute bottom-full mb-2
@@ -297,7 +299,7 @@ function FoodType({ type, t }: FoodTypeProps) {
   return (
     <div className="relative group flex items-center gap-2 bg-zinc-100 dark:bg-zinc-800 px-3 py-1 rounded-full text-xs tracking-wide cursor-default">
       <img
-        src="/icons/cooking/icon_foodtype.png"
+        src={getAssetPath("/icons/cooking/icon_foodtype.png")}
         className="w-5 h-5 object-contain"
       />
 

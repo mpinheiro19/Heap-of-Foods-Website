@@ -1,7 +1,9 @@
 "use client";
 
+import { Suspense } from "react";
 import { useState, useMemo, useRef, useEffect } from "react";
 import { useTranslation } from "@/lib/i18n";
+import { getAssetPath } from "@/lib/paths";
 import { usePageTitle } from "@/components/PageTitle";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -84,6 +86,67 @@ export default function Ingredients() {
   const { t } = useTranslation();
 
   usePageTitle(t("pages.ingredients.title")); 
+
+  const SPOILAGE_LABELS = useMemo(
+    () => ({
+      PERISH_ONEDAY: t("spoilagetime.oneday"),
+      PERISH_TWODAY: t("spoilagetime.twoday"),
+      PERISH_FOURDAY: t("spoilagetime.fourday"),
+      PERISH_SUPERFAST: t("spoilagetime.superfast"),
+      PERISH_MEDFAST: t("spoilagetime.medfast"),
+      PERISH_FAST: t("spoilagetime.fast"),
+      PERISH_FASTISH: t("spoilagetime.fastish"),
+      PERISH_MED: t("spoilagetime.med"),
+      PERISH_SLOW: t("spoilagetime.slow"),
+      PERISH_PRESERVED: t("spoilagetime.preserved"),
+      PERISH_SUPERSLOW: t("spoilagetime.superslow"),
+    }),
+    [t],
+  );
+
+  const GetSpoilageLabel = (spoilage: number | undefined) => {
+    if (spoilage == null) return t("spoilagetime.never");
+
+    const entries = Object.entries(PERISH_MAP) as [
+      keyof typeof PERISH_MAP,
+      number,
+    ][];
+    entries.sort((a, b) => a[1] - b[1]);
+    for (const [key, value] of entries) {
+      if (spoilage <= value) return SPOILAGE_LABELS[key];
+    }
+    return SPOILAGE_LABELS.PERISH_SUPERSLOW;
+  };
+
+  const getVariantValue = (value: any, index: number) => {
+    if (Array.isArray(value)) return value[index];
+    return index === 0 ? value : undefined;
+  };
+
+  const [selected, setSelected] = useState<any>(null);
+
+  const [showTopButton, setShowTopButton] = useState(false);
+
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [sortingOpen, setSortingOpen] = useState(false);
+
+  const [sortType, setSortType] = useState("default");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
+  const [filterFoodType, setFilterFoodType] = useState<string[]>([]);
+  const [filterCookType, setFilterCookType] = useState<string[]>([]);
+
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <IngredientsContent />
+    </Suspense>
+  );
+}
+
+function IngredientsContent() {
+  const { t } = useTranslation();
+
+  usePageTitle(t("pages.ingredients.title"));
 
   const SPOILAGE_LABELS = useMemo(
     () => ({
@@ -492,7 +555,7 @@ export default function Ingredients() {
                       }`}
                     >
                       <img
-                        src={`/icons/ingredients/ingredient_${ingredient.name}${ingredient.variant === "normal" ? "" : `_${ingredient.variant}`}.png`}
+                        src={getAssetPath(`/icons/ingredients/ingredient_${ingredient.name}${ingredient.variant === "normal" ? "" : `_${ingredient.variant}`}.png`)}
                         className="w-10 h-10 object-contain"
                       />
                       <span className="text-sm font-semibold">
@@ -512,7 +575,7 @@ export default function Ingredients() {
             <div className="relative group">
               <button
                 onClick={() => setFiltersOpen(!filtersOpen)}
-                className="bg-white dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-700 px-4 py-3 rounded-xl font-bold flex items-center gap-2 cursor-pointer"
+                className="bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-700 px-4 py-3 rounded-xl font-bold flex items-center gap-2 cursor-pointer"
               >
                 <FontAwesomeIcon icon={faFilter} />
               </button>
@@ -528,7 +591,7 @@ export default function Ingredients() {
             <div className="relative group">
               <button
                 onClick={() => setSortingOpen(!sortingOpen)}
-                className="bg-white dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-700 px-4 py-3 rounded-xl font-bold flex items-center gap-2 cursor-pointer"
+                className="bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-700 px-4 py-3 rounded-xl font-bold flex items-center gap-2 cursor-pointer"
               >
                 <FontAwesomeIcon icon={faArrowDownAZ} />
               </button>
@@ -547,7 +610,7 @@ export default function Ingredients() {
                   onClick={() =>
                     window.scrollTo({ top: 0, behavior: "smooth" })
                   }
-                  className="bg-white dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-700 px-4 py-3 rounded-xl font-bold flex items-center gap-2 cursor-pointer"
+                  className="bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-700 px-4 py-3 rounded-xl font-bold flex items-center gap-2 cursor-pointer"
                 >
                   <FontAwesomeIcon icon={faCircleChevronUp} />
                 </button>
@@ -567,7 +630,7 @@ export default function Ingredients() {
                     <div className="max-h-[420px] overflow-y-auto overscroll-contain p-4 flex flex-col gap-2 font-bold">
                       <DropdownGroup
                         title={t("filters.foodtype")}
-                        icon="/icons/cooking/icon_foodtype.png"
+                        icon={getAssetPath("/icons/cooking/icon_foodtype.png")}
                       >
                         <div className="grid grid-cols-[max-content_max-content] gap-x-9 gap-y-2">
                           {uniqueFoodTypes.map((type: string) => (
@@ -589,7 +652,7 @@ export default function Ingredients() {
                       </DropdownGroup>
                       <DropdownGroup
                         title={t("filters.cooktype")}
-                        icon="/icons/cooking/icon_cooktype.png"
+                        icon={getAssetPath("/icons/cooking/icon_cooktype.png")}
                       >
                         <div className="grid grid-cols-5 gap-x-0 gap-y-2">
                           {uniqueCookTypes.map((value: string) => (
@@ -628,7 +691,7 @@ export default function Ingredients() {
                   <div className="w-11/12 sm:w-[300px] bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl p-4 flex flex-col gap-3 font-bold shadow-sm dark:shadow-none">
                     <DropdownGroup
                       title={t("sorting.directiontype")}
-                      icon="/icons/cooking/icon_priority.png"
+                      icon={getAssetPath("/icons/cooking/icon_priority.png")}
                     >
                       <CheckboxFilter
                         label={t("sorting.direction.up")}
@@ -646,7 +709,7 @@ export default function Ingredients() {
 
                     <DropdownGroup
                       title={t("sorting.ordertype")}
-                      icon="/icons/cooking/icon_debuff.png"
+                      icon={getAssetPath("/icons/cooking/icon_debuff.png")}
                     >
                       <CheckboxFilter
                         label={t("sorting.type.default")}
@@ -733,7 +796,7 @@ export default function Ingredients() {
             className="bg-white dark:bg-zinc-900 rounded-2xl p-3 flex flex-col items-center gap-3 cursor-pointer hover:scale-105 transition shadow-sm dark:shadow-none w-full sm:w-48"
           >
             <img
-              src={`/icons/ingredients/ingredient_${ingredient.name}.png`}
+              src={getAssetPath(`/icons/ingredients/ingredient_${ingredient.name}.png`)}
               className="w-15"
             />
             <h2 className="text-center font-semibold text-lg text-zinc-900 dark:text-white">
@@ -818,7 +881,7 @@ export default function Ingredients() {
                       className="flex flex-col items-center"
                     >
                       <img
-                        src={`/icons/ingredients/ingredient_${selected.name}${variant.type === "normal" ? "" : `_${variant.type}`}.png`}
+                        src={getAssetPath(`/icons/ingredients/ingredient_${selected.name}${variant.type === "normal" ? "" : `_${variant.type}`}.png`)}
                         className="w-20 h-20 object-contain"
                       />
                       <span className="text-sm font-semibold text-zinc-900 dark:text-white mt-1 text-center">
@@ -860,28 +923,28 @@ export default function Ingredients() {
 
                     <Block>
                       <Stat
-                        icon="/icons/cooking/icon_health.png"
+                        icon={getAssetPath("/icons/cooking/icon_health.png")}
                         value={getVariantValue(selected.health, i)}
                         tooltip={t("tooltips.health")}
                         isStatus
                       />
 
                       <Stat
-                        icon="/icons/cooking/icon_hunger.png"
+                        icon={getAssetPath("/icons/cooking/icon_hunger.png")}
                         value={getVariantValue(selected.hunger, i)}
                         tooltip={t("tooltips.hunger")}
                         isStatus
                       />
 
                       <Stat
-                        icon="/icons/cooking/icon_sanity.png"
+                        icon={getAssetPath("/icons/cooking/icon_sanity.png")}
                         value={getVariantValue(selected.sanity, i)}
                         tooltip={t("tooltips.sanity")}
                         isStatus
                       />
 
                       <Stat
-                        icon="/icons/cooking/icon_spoilage.png"
+                        icon={getAssetPath("/icons/cooking/icon_spoilage.png")}
                         value={GetSpoilageLabel(
                           getVariantValue(selected.spoilage, i),
                         )}
@@ -1029,7 +1092,7 @@ function FoodType({ type, t }: { type: string; t: (key: string) => string }) {
   return (
     <div className="relative group flex items-center gap-2 bg-zinc-100 dark:bg-zinc-800 px-3 py-1 rounded-full text-xs tracking-wide cursor-default">
       <img
-        src="/icons/cooking/icon_foodtype.png"
+        src={getAssetPath("/icons/cooking/icon_foodtype.png")}
         className="w-5 h-5 object-contain"
       />
       <span className="text-zinc-900 dark:text-white">
@@ -1056,7 +1119,7 @@ function CookType({
   return (
     <div className="relative group flex items-center gap-2 bg-zinc-100 dark:bg-zinc-800 px-3 py-1 rounded-full text-xs tracking-wide cursor-default">
       <img
-        src="/icons/cooking/icon_cooktype.png"
+        src={getAssetPath("/icons/cooking/icon_cooktype.png")}
         className="w-5 h-5 object-contain"
       />
 
@@ -1102,7 +1165,7 @@ function TopEffect({ icon, value, tooltip, enableTooltip = true }: any) {
             bg-black text-white text-xs dark:bg-white dark:text-black
             px-3 py-1 rounded
             shadow-lg z-50
-            whitespace-nowrap
+            whitespace-nowrap max-w-xs sm:max-w-md md:max-w-lg
           "
         >
           {tooltip}

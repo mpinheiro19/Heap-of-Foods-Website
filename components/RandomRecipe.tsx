@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@/lib/i18n";
+import { getAssetPath } from "@/lib/paths";
 
 import recipes from "@/data/recipes_cookpot.json";
 import recipes_warly from "@/data/recipes_cookpot_warly.json";
@@ -19,11 +20,11 @@ const recipePages = [
 ];
 
 const allRecipeIcons = [
-  ...recipes.map((r) => `/foods_cookpot/${r.name}.png`),
-  ...recipes_warly.map((r) => `/foods_cookpot_warly/${r.name}.png`),
-  ...recipes_keg.map((r) => `/foods_cookpot_keg/${r.name}.png`),
-  ...recipes_jar.map((r) => `/foods_cookpot_jar/${r.name}.png`),
-  ...recipes_seasonal.map((r) => `/foods_cookpot_seasonal/${r.name}.png`),
+  ...recipes.map((r) => getAssetPath(`/foods_cookpot/${r.name}.png`)),
+  ...recipes_warly.map((r) => getAssetPath(`/foods_cookpot_warly/${r.name}.png`)),
+  ...recipes_keg.map((r) => getAssetPath(`/foods_cookpot_keg/${r.name}.png`)),
+  ...recipes_jar.map((r) => getAssetPath(`/foods_cookpot_jar/${r.name}.png`)),
+  ...recipes_seasonal.map((r) => getAssetPath(`/foods_cookpot_seasonal/${r.name}.png`)),
 ];
 
 interface RandomRecipeButtonProps {
@@ -70,7 +71,7 @@ export default function RandomRecipe({interval = 500, onSelectItem, }: RandomRec
       onMouseLeave={() => setHovered(false)}
       className="
       flex items-center justify-center
-      gap-2 px-2 sm:px-4 py-1.5 sm:py-2
+      gap-2 px-2 sm:px-4 py-1.5 sm:py-1
       bg-white dark:bg-zinc-900
       rounded-xl
       shadow hover:shadow-lg
