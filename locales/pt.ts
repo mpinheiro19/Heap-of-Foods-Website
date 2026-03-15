@@ -1217,6 +1217,31 @@ const pt = {
   seealso: {
     label: "Veja também",
   },
+
+  miniGame: {
+    nav: "Mini-Game",
+    title: "Adivinha os Ingredientes",
+    subtitle: "Adivinhe todos os ingredientes da receita!",
+    selectCategory: "Escolha uma categoria de receitas:",
+    categories: {
+      cookpot: "Panela de Barro",
+      warly: "Especialidades do Chef",
+      keg: "Barril de Madeira",
+      jar: "Pote de Conservas",
+      seasonal: "Sazonais",
+    },
+    streak: "Sequência",
+    bestStreak: "Melhor Sequência",
+    ingredientsNeeded: "{{found}} / {{total}} ingredientes",
+    guessIngredient: "Clique em um ingrediente para tentar:",
+    correct: "Acertou!",
+    wrong: "Errou!",
+    victory: {
+      message: "Você descobriu todos os ingredientes!",
+      playAgain: "Jogar Novamente",
+      newCategory: "Nova Categoria",
+    },
+  },
 }
 
 export default pt

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "@/lib/i18n";
 import { getAssetPath } from "@/lib/paths";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faGear, faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faGear, faBars, faXmark, faDice } from "@fortawesome/free-solid-svg-icons";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
@@ -23,6 +23,8 @@ export default function TopHotBar() {
     { href: "/recipes_seasonal", icon: getAssetPath("/icons/misc/icon_cookpot_seasonal.png"), label: t("main.cookpot_seasonal") },
     { href: "/ingredients", icon: getAssetPath("/icons/misc/icon_ingredients.png"), label: t("main.ingredients") },
   ];
+
+  const miniGameLink = { href: "/mini-game", label: t("miniGame.nav") };
 
   return (
     <div
@@ -48,6 +50,12 @@ export default function TopHotBar() {
             </button>
           </Link>
         ))}
+        <Link href={miniGameLink.href}>
+          <button className="flex items-center gap-2 px-3 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 transition font-bold cursor-pointer">
+            <FontAwesomeIcon icon={faDice} className="w-6 h-6" />
+            {miniGameLink.label}
+          </button>
+        </Link>
       </div>
 
       {/* DIREITA: SETTINGS + HAMBURGER */}
@@ -79,6 +87,12 @@ export default function TopHotBar() {
               </button>
             </Link>
           ))}
+          <Link href={miniGameLink.href} onClick={() => setMenuOpen(false)}>
+            <button className="w-full flex items-center gap-2 px-3 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 transition font-bold cursor-pointer">
+              <FontAwesomeIcon icon={faDice} className="w-6 h-6" />
+              {miniGameLink.label}
+            </button>
+          </Link>
         </div>
       )}
     </div>

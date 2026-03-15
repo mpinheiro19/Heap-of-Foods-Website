@@ -1222,6 +1222,31 @@ const en = {
   seealso: {
     label: "See also",
   },
+
+  miniGame: {
+    nav: "Mini-Game",
+    title: "Ingredient Guessing Game",
+    subtitle: "Guess all ingredients of the recipe!",
+    selectCategory: "Choose a recipe category:",
+    categories: {
+      cookpot: "Crock Pot",
+      warly: "Chef's Specials",
+      keg: "Wooden Keg",
+      jar: "Preserves Jar",
+      seasonal: "Seasonal",
+    },
+    streak: "Streak",
+    bestStreak: "Best Streak",
+    ingredientsNeeded: "{{found}} / {{total}} ingredients",
+    guessIngredient: "Click an ingredient to guess:",
+    correct: "Correct!",
+    wrong: "Wrong!",
+    victory: {
+      message: "You found all ingredients!",
+      playAgain: "Play Again",
+      newCategory: "New Category",
+    },
+  },
 }
 
 export default en
